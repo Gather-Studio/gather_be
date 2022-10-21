@@ -46,6 +46,6 @@ class Api::V1::ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:name, :type, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
+      params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
     end
 end

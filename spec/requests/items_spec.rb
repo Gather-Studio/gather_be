@@ -47,7 +47,7 @@ RSpec.describe "/items", type: :request do
       expect(item).to be_a Hash
       expect(item).to have_key :name
       expect(item).to have_key :status
-      expect(item).to have_key :type
+      expect(item).to have_key :style
       expect(item).to have_key :clay_body
       expect(item).to have_key :glazes
       expect(item).to have_key :height
@@ -74,7 +74,7 @@ RSpec.describe "/items", type: :request do
       expect(item).to be_a Hash
       expect(item).to have_key :name
       expect(item).to have_key :status
-      expect(item).to have_key :type
+      expect(item).to have_key :style
       expect(item).to have_key :clay_body
       expect(item).to have_key :glazes
       expect(item).to have_key :height
@@ -108,7 +108,7 @@ RSpec.describe "/items", type: :request do
         expect(item).to be_a Hash
         expect(item).to have_key :name
         expect(item).to have_key :status
-        expect(item).to have_key :type
+        expect(item).to have_key :style
         expect(item).to have_key :clay_body
         expect(item).to have_key :glazes
         expect(item).to have_key :height
@@ -170,7 +170,7 @@ RSpec.describe "/items", type: :request do
         expect(item).to be_a Hash
         expect(item).to have_key :name
         expect(item).to have_key :status
-        expect(item).to have_key :type
+        expect(item).to have_key :style
         expect(item).to have_key :clay_body
         expect(item).to have_key :glazes
         expect(item).to have_key :height
@@ -197,7 +197,7 @@ RSpec.describe "/items", type: :request do
       expect {
         delete api_v1_item_url(item), headers: valid_headers, as: :json
       }.to change(Item, :count).by(-1)
-      
+
       expect(response).to have_http_status(:no_content)
     end
   end
