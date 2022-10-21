@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "/items", type: :request do
+RSpec.describe "api/v1/items", type: :request do
 
   let(:user) {
     User.create!({ 
