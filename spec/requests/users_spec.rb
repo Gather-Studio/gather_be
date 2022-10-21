@@ -32,10 +32,11 @@ RSpec.describe "/users", type: :request do
       get api_v1_users_url, headers: valid_headers, as: :json
 
       expect(response).to be_successful
+    
       body = JSON.parse(response.body, symbolize_names: true)[:data]
       expect(body).to be_an Array
       expect(body.first).to have_key :id
-      expect(body.first[:type]).to eq("user")
+      expect(body.first[:type]).to eq("users")
       
       user = body[0][:attributes]
       expect(user).to be_a Hash
@@ -49,8 +50,35 @@ RSpec.describe "/users", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       user = User.create! valid_attributes
+      item = user.items.create!(name: "Knit Sweater", status: 0)
       get api_v1_user_url(user), as: :json
       expect(response).to be_successful
+
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(body).to be_a Hash
+      expect(body).to have_key :id
+      expect(body[:type]).to eq("user")
+
+      user = body[:attributes]
+      expect(user).to_not have_key :password_digest
+      expect(user[:email]).to be_a String
+      expect(user[:first_name]).to be_a String
+      expect(user[:last_name]).to be_a String
+      expect(user[:items]).to be_an Array
+
+      item = user[:items].first
+      expect(item).to have_key :id
+      expect(item).to have_key :name
+      expect(item).to have_key :status
+      expect(item).to have_key :clay_body
+      expect(item).to have_key :glazes
+      expect(item).to have_key :height
+      expect(item).to have_key :width
+      expect(item).to have_key :memo
+      expect(item).to have_key :user_id
+      expect(item).to have_key :created_at
+      expect(item).to have_key :updated_at
     end
   end
 

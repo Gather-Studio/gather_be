@@ -431,6 +431,7 @@
           1,
           null,
           1,
+          null,
           1,
           1,
           1,
@@ -445,6 +446,33 @@
           null,
           null,
           null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
           1,
           1,
           1,
@@ -715,6 +743,15 @@
           null
         ]
       },
+      "/Users/jenniferhalloran/projects/gather_studio/gather_be/app/serializers/users_serializer.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null
+        ]
+      },
       "/Users/jenniferhalloran/projects/gather_studio/gather_be/app/serializers/user_serializer.rb": {
         "lines": [
           1,
@@ -725,6 +762,6 @@
         ]
       }
     },
-    "timestamp": 1666383251
+    "timestamp": 1666384777
   }
 }
