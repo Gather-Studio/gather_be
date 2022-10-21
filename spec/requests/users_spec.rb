@@ -137,28 +137,49 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  # describe "PATCH /update" do
-  #   context "with valid parameters" do
-  #     let(:new_attributes) {
-  #       skip("Add a hash of attributes valid for your model")
-  #     }
+  describe "PATCH /update" do
+    context "with valid parameters" do
+      let(:new_attributes) {
+        ({
+          first_name: "Jess"
+        })
+      }
 
-  #     it "updates the requested user" do
-  #       user = User.create! valid_attributes
-  #       patch user_url(user),
-  #             params: { user: new_attributes }, headers: valid_headers, as: :json
-  #       user.reload
-  #       skip("Add assertions for updated state")
-  #     end
+      let(:password_attributes) {
+        ({
+          password: "iloveteaching",
+          password_confirmation: "iloveteaching"
+        })
+      }
 
-  #     it "renders a JSON response with the user" do
-  #       user = User.create! valid_attributes
-  #       patch user_url(user),
-  #             params: { user: new_attributes }, headers: valid_headers, as: :json
-  #       expect(response).to have_http_status(:ok)
-  #       expect(response.content_type).to match(a_string_including("application/json"))
-  #     end
-  #   end
+      it "updates the requested user" do
+        user = User.create! valid_attributes
+        patch api_v1_user_url(user),
+              params: { user: password_attributes }, headers: valid_headers, as: :json
+        
+        old_password = user.password_digest
+        user.reload
+        expect(user.password_digest).to_not eq(old_password)
+      end
+
+      it "updates the requested user's password" do
+        user = User.create! valid_attributes
+        patch api_v1_user_url(user),
+              params: { user: new_attributes }, headers: valid_headers, as: :json
+        
+        expect(user.first_name).to eq("Jessica")
+        user.reload
+        expect(user.first_name).to eq("Jess")
+      end
+
+      it "renders a JSON response with the user" do
+        user = User.create! valid_attributes
+        patch api_v1_user_url(user),
+              params: { user: new_attributes }, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to match(a_string_including("application/json"))
+      end
+    end
 
   #   context "with invalid parameters" do
   #     it "renders a JSON response with errors for the user" do
@@ -169,7 +190,7 @@ RSpec.describe "/users", type: :request do
   #       expect(response.content_type).to match(a_string_including("application/json"))
   #     end
   #   end
-  # end
+  end
 
   # describe "DELETE /destroy" do
   #   it "destroys the requested user" do

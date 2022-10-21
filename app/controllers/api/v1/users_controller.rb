@@ -4,12 +4,12 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users
   def index
     @users = User.all
-    render json: UsersSerializer.new(@users), status: 200
+    render json: UsersSerializer.new(@users), status: :ok
   end
 
   # GET /users/1
   def show
-    render json: UserSerializer.new(@user), status: 200
+    render json: UserSerializer.new(@user), status: :ok
   end
 
   # POST /users
@@ -17,7 +17,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: UserSerializer.new(@user), status: 201
+      render json: UserSerializer.new(@user), status: :created
     else
       error = @user.errors.full_messages.to_sentence.to_s
       render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
@@ -27,9 +27,10 @@ class Api::V1::UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
-      render json: @user
+      render json: UserSerializer.new(@user), status: :ok
     else
-      render json: @user.errors, status: :unprocessable_entity
+      error = @user.errors.full_messages.to_sentence.to_s
+      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
     end
   end
 
