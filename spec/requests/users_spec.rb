@@ -1,40 +1,58 @@
 require 'rails_helper'
 
 RSpec.describe "/users", type: :request do
-  # # This should return the minimal set of attributes required to create a valid
-  # # User. As you add validations to User, be sure to
-  # # adjust the attributes here as well.
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
+  # This should return the minimal set of attributes required to create a valid
+  # User. As you add validations to User, be sure to
+  # adjust the attributes here as well.
+  let(:valid_attributes) {
+    ({ 
+      email: "missday@newgirl.com",
+      password: "ilovecrafts",
+      password_confirmation: "ilovecrafts",
+      first_name: "Jessica",
+      last_name: "Day"
+    })
+  }
 
   # let(:invalid_attributes) {
   #   skip("Add a hash of attributes invalid for your model")
   # }
 
-  # # This should return the minimal set of values that should be in the headers
-  # # in order to pass any filters (e.g. authentication) defined in
-  # # UsersController, or in your router and rack
-  # # middleware. Be sure to keep this updated too.
-  # let(:valid_headers) {
-  #   {}
-  # }
+  # This should return the minimal set of values that should be in the headers
+  # in order to pass any filters (e.g. authentication) defined in
+  # UsersController, or in your router and rack
+  # middleware. Be sure to keep this updated too.
+  let(:valid_headers) {
+    {}
+  }
 
   describe "GET /index" do
     it "renders a successful response" do
       User.create! valid_attributes
       get api_v1_users_url, headers: valid_headers, as: :json
+
       expect(response).to be_successful
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+      expect(body).to be_an Array
+      expect(body.first).to have_key :id
+      expect(body.first[:type]).to eq("user")
+      
+      user = body[0][:attributes]
+      expect(user).to be_a Hash
+      expect(user).to_not have_key :password_digest
+      expect(user[:email]).to be_a String
+      expect(user[:first_name]).to be_a String
+      expect(user[:last_name]).to be_a String
     end
   end
 
-  # describe "GET /show" do
-  #   it "renders a successful response" do
-  #     user = User.create! valid_attributes
-  #     get user_url(user), as: :json
-  #     expect(response).to be_successful
-  #   end
-  # end
+  describe "GET /show" do
+    it "renders a successful response" do
+      user = User.create! valid_attributes
+      get api_v1_user_url(user), as: :json
+      expect(response).to be_successful
+    end
+  end
 
   # describe "POST /create" do
   #   context "with valid parameters" do
