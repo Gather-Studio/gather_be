@@ -7,12 +7,12 @@ class Api::V1::UsersController < ApplicationController
     render json: UsersSerializer.new(@users), status: :ok
   end
 
-  # GET /users/1
+  # GET /api/v1/users/1
   def show
     render json: UserSerializer.new(@user), status: :ok
   end
 
-  # POST /users
+  # POST /api/v1/users
   def create
     @user = User.new(user_params)
 
@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
+  # PATCH/PUT /api/v1/users/1
   def update
     if @user.update(user_params)
       render json: UserSerializer.new(@user), status: :ok
@@ -34,13 +34,12 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
+  # DELETE /api/v1/users/1
   def destroy
     @user.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
     end
