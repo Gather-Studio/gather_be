@@ -1,16 +1,15 @@
 class Api::V1::ItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
 
-  # GET /items
+  # GET api/v1/items
   def index
     @items = Item.all
-
-    render json: @items
+    render json: ItemSerializer.new(@items), status: :ok
   end
 
-  # GET /items/1
+  # GET api/v1/items/1
   def show
-    render json: @item
+    render json: ItemSerializer.new(@item), status: :ok
   end
 
   # POST /items
@@ -18,24 +17,27 @@ class Api::V1::ItemsController < ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      render json: @item, status: :created, location: @item
+      render json: ItemSerializer.new(@item), status: :created
     else
-      render json: @item.errors, status: :unprocessable_entity
+      error = @item.errors.full_messages.to_sentence.to_s
+      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /items/1
   def update
     if @item.update(item_params)
-      render json: @item
+      render json: ItemSerializer.new(@item), status: :ok
     else
-      render json: @item.errors, status: :unprocessable_entity
+      error = @item.errors.full_messages.to_sentence.to_s
+      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
     end
   end
 
   # DELETE /items/1
   def destroy
     @item.destroy
+    render status: 204
   end
 
   private
