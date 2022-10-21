@@ -37,6 +37,7 @@ class Api::V1::UsersController < ApplicationController
   # DELETE /api/v1/users/1
   def destroy
     @user.destroy
+    render status: 204
   end
 
   private

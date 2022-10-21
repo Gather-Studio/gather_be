@@ -133,6 +133,10 @@ RSpec.describe "/users", type: :request do
              params: { user: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
+
+        body = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(body).to be_a Hash
+        expect(body).to have_key(:error)
       end
     end
   end
@@ -184,6 +188,18 @@ RSpec.describe "/users", type: :request do
               params: { user: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
+
+        body = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(body).to be_a Hash
+        expect(body).to have_key :id
+        expect(body[:type]).to eq("user")
+
+        user = body[:attributes]
+        expect(user).to_not have_key :password_digest
+        expect(user[:email]).to be_a String
+        expect(user[:first_name]).to be_a String
+        expect(user[:last_name]).to be_a String
+        expect(user[:items]).to be_an Array
       end
     end
 
@@ -204,6 +220,7 @@ RSpec.describe "/users", type: :request do
       expect {
         delete api_v1_user_url(user), headers: valid_headers, as: :json
       }.to change(User, :count).by(-1)
+      expect(response).to have_http_status(:no_content)
     end
   end
 end
