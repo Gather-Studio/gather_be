@@ -14,9 +14,15 @@ RSpec.describe "/users", type: :request do
     })
   }
 
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
+  let(:invalid_attributes) {
+    ({ 
+      email: "winston@newgirl.com",
+      password: "cats",
+      password_confirmation: "ilovecats",
+      first_name: "Winston",
+      last_name: "bishop"
+    })
+  }
 
   # This should return the minimal set of values that should be in the headers
   # in order to pass any filters (e.g. authentication) defined in
@@ -32,6 +38,7 @@ RSpec.describe "/users", type: :request do
       get api_v1_users_url, headers: valid_headers, as: :json
 
       expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
     
       body = JSON.parse(response.body, symbolize_names: true)[:data]
       expect(body).to be_an Array
@@ -53,6 +60,7 @@ RSpec.describe "/users", type: :request do
       item = user.items.create!(name: "Knit Sweater", status: 0)
       get api_v1_user_url(user), as: :json
       expect(response).to be_successful
+      expect(response).to have_http_status(:ok)
 
       body = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -82,39 +90,52 @@ RSpec.describe "/users", type: :request do
     end
   end
 
-  # describe "POST /create" do
-  #   context "with valid parameters" do
-  #     it "creates a new User" do
-  #       expect {
-  #         post users_url,
-  #              params: { user: valid_attributes }, headers: valid_headers, as: :json
-  #       }.to change(User, :count).by(1)
-  #     end
+  describe "POST /create" do
+    context "with valid parameters" do
+      it "creates a new User" do
+        expect {
+          post api_v1_users_url,
+               params: { user: valid_attributes }, headers: valid_headers, as: :json
+        }.to change(User, :count).by(1)
+      end
 
-  #     it "renders a JSON response with the new user" do
-  #       post users_url,
-  #            params: { user: valid_attributes }, headers: valid_headers, as: :json
-  #       expect(response).to have_http_status(:created)
-  #       expect(response.content_type).to match(a_string_including("application/json"))
-  #     end
-  #   end
+      it "renders a JSON response with the new user" do
+        post api_v1_users_url,
+             params: { user: valid_attributes }, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:created)
+        expect(response.content_type).to match(a_string_including("application/json"))
 
-  #   context "with invalid parameters" do
-  #     it "does not create a new User" do
-  #       expect {
-  #         post users_url,
-  #              params: { user: invalid_attributes }, as: :json
-  #       }.to change(User, :count).by(0)
-  #     end
+        body = JSON.parse(response.body, symbolize_names: true)[:data]
 
-  #     it "renders a JSON response with errors for the new user" do
-  #       post users_url,
-  #            params: { user: invalid_attributes }, headers: valid_headers, as: :json
-  #       expect(response).to have_http_status(:unprocessable_entity)
-  #       expect(response.content_type).to match(a_string_including("application/json"))
-  #     end
-  #   end
-  # end
+        expect(body).to be_a Hash
+        expect(body).to have_key :id
+        expect(body[:type]).to eq("user")
+
+        user = body[:attributes]
+        expect(user).to_not have_key :password_digest
+        expect(user[:email]).to be_a String
+        expect(user[:first_name]).to be_a String
+        expect(user[:last_name]).to be_a String
+        expect(user[:items]).to be_an Array
+      end
+    end
+
+    context "with invalid parameters" do
+      it "does not create a new User" do
+        expect {
+          post api_v1_users_url,
+               params: { user: invalid_attributes }, as: :json
+        }.to change(User, :count).by(0)
+      end
+
+      it "renders a JSON response with errors for the new user" do
+        post api_v1_users_url,
+             params: { user: invalid_attributes }, headers: valid_headers, as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to match(a_string_including("application/json"))
+      end
+    end
+  end
 
   # describe "PATCH /update" do
   #   context "with valid parameters" do
