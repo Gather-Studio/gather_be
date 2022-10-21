@@ -12,7 +12,7 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.new(@item), status: :ok
   end
 
-  # POST /items
+  # POST api/v1/items
   def create
     @item = Item.new(item_params)
 
@@ -24,7 +24,7 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /items/1
+  # PATCH/PUT api/v1/items/1
   def update
     if @item.update(item_params)
       render json: ItemSerializer.new(@item), status: :ok
@@ -34,19 +34,17 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
-  # DELETE /items/1
+  # DELETE api/v1/items/1
   def destroy
     @item.destroy
     render status: 204
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def item_params
       params.require(:item).permit(:name, :type, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
     end
