@@ -1,40 +1,39 @@
-class Api::V1::ItemsController < ApplicationController
+class Api::V1::UserItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:index]
 
-  # GET api/v1/items
+  # GET /api/v1/users/:user_id/items
   def index
-    @items = Item.all
+    @items = @user.items
     render json: ItemSerializer.new(@items), status: :ok
   end
 
-  # GET api/v1/items/1
+  # GET api/v1/users/:user_id/items/1
   def show
     render json: ItemSerializer.new(@item), status: :ok
   end
 
-  # POST api/v1/items
+  # POST api/v1/users/:user_id/items
   def create
     @item = Item.new(item_params)
 
     if @item.save
       render json: ItemSerializer.new(@item), status: :created
     else
-      error = @item.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@item)
     end
   end
 
-  # PATCH/PUT api/v1/items/1
+  # PATCH/PUT api/v1/users/:user_id/items/1
   def update
     if @item.update(item_params)
       render json: ItemSerializer.new(@item), status: :ok
     else
-      error = @item.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@item)
     end
   end
 
-  # DELETE api/v1/items/1
+  # DELETE api/v1/users/:user_id/items/1
   def destroy
     @item.destroy
     render status: 204
@@ -43,6 +42,10 @@ class Api::V1::ItemsController < ApplicationController
   private
     def set_item
       @item = Item.find(params[:id])
+    end
+
+    def set_user 
+      @user = User.find(params[:user_id])
     end
 
     def item_params
