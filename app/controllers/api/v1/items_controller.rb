@@ -19,8 +19,7 @@ class Api::V1::ItemsController < ApplicationController
     if @item.save
       render json: ItemSerializer.new(@item), status: :created
     else
-      error = @item.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@item)
     end
   end
 
@@ -29,8 +28,7 @@ class Api::V1::ItemsController < ApplicationController
     if @item.update(item_params)
       render json: ItemSerializer.new(@item), status: :ok
     else
-      error = @item.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@item)
     end
   end
 

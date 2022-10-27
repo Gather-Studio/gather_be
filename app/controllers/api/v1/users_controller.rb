@@ -19,8 +19,7 @@ class Api::V1::UsersController < ApplicationController
     if @user.save
       render json: UserSerializer.new(@user), status: :created
     else
-      error = @user.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@user)
     end
   end
 
@@ -29,8 +28,7 @@ class Api::V1::UsersController < ApplicationController
     if @user.update(user_params)
       render json: UserSerializer.new(@user), status: :ok
     else
-      error = @user.errors.full_messages.to_sentence.to_s
-      render json: ErrorSerializer.format_error(error), status: :unprocessable_entity
+      render_error(@user)
     end
   end
 
