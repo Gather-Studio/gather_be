@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users
   def index
     @users = User.all
-    render json: UsersSerializer.new(@users), status: :ok
+    render json: UserSerializer.new(@users), status: :ok
   end
 
   # GET /api/v1/users/1
