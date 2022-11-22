@@ -11,3 +11,34 @@
   </p>
 </div>
 
+## About The Gather Studio API
+
+Welcome!
+This API is the backend for the Gather Studio website deployed to Heroku. It allows members to create an account, sign in, and track the pottery pieces they have made at the studio. 
+
+<details>
+  <summary>Available Endpoints</summary>
+  <ol>
+    <li>
+      <a href="#user-endpoints">User Endpoints</a>
+      <ul>
+        <li><a href="#get-all-users">Get All Users</a></li>
+        <li><a href="#get-user-by-id">Get User By ID</a></li>
+        <li><a href="#create-user">Create User</a></li>
+        <li><a href="#update-user">Update User</a></li>
+        <li><a href="#delete-user">Delete User</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Item Endpoints</a>
+      <ul>
+        <li><a href="#get-all-user-items">Get All of a User's Items</a></li>
+        <li><a href="#get-item">Get Item</a></li>
+        <li><a href="#create-item">Create Item</a></li>
+        <li><a href="#update-item">Update Item</a></li>
+        <li><a href="#delete-item">Delete Item</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
+
