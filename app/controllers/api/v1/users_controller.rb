@@ -14,8 +14,10 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /api/v1/users
   def create
-    @user = User.new(user_params)
-
+    new_user = user_params 
+    new_user[:email] = new_user[:email].downcase 
+    @user = User.new(new_user)
+    
     if @user.save
       render json: UserSerializer.new(@user), status: :created
     else
