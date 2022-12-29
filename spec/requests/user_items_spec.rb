@@ -53,7 +53,6 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(item).to have_key :height
       expect(item).to have_key :width
       expect(item).to have_key :memo
-      expect(item).to have_key :user
     end
   end
 
@@ -80,7 +79,6 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(item).to have_key :height
       expect(item).to have_key :width
       expect(item).to have_key :memo
-      expect(item).to have_key :user
     end
   end
 
@@ -114,7 +112,6 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
         expect(item).to have_key :height
         expect(item).to have_key :width
         expect(item).to have_key :memo
-        expect(item).to have_key :user
       end
     end
 
@@ -176,7 +173,6 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
         expect(item).to have_key :height
         expect(item).to have_key :width
         expect(item).to have_key :memo
-        expect(item).to have_key :user
       end
     end
 
