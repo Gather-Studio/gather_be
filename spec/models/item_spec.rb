@@ -9,6 +9,7 @@ RSpec.describe Item, type: :model do
   describe 'relationships' do
     it { should belong_to(:user) }
   end
+  
 
   let!(:user) {User.create!(email: "missday@newgirl.com", password: "ilovecrafts", password_confirmation: "ilovecrafts", first_name: "Jessica", last_name: "Day")}
 
