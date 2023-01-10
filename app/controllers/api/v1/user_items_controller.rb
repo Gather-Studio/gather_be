@@ -4,11 +4,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # GET /api/v1/users/:user_id/items
   def index
-    if params[:status]
-      @items = @user.items.filter_by_status(params[:status])
-    else 
-      @items = @user.items
-    end 
+    @items = @user.items
     render json: ItemSerializer.new(@items), status: :ok
   end
 
