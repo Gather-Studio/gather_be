@@ -31,7 +31,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # PATCH/PUT api/v1/users/:user_id/items/1
   def update
-    if @item.update(item_params)
+    if @item.update(item_update_params)
       render json: ItemSerializer.new(@item), status: :ok
     else
       render_error(@item)
@@ -59,6 +59,10 @@ class Api::V1::UserItemsController < ApplicationController
 
     def item_params
       params[:item][:user_id] = params[:user_id].to_i
+      params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
+    end
+
+    def item_update_params
       params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
     end
 end
