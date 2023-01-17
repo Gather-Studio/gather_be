@@ -29,13 +29,19 @@ This API is the backend for the Gather Studio website deployed to Heroku. It all
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Item Endpoints</a>
+      <a href="#getting-started">User Item Endpoints</a>
       <ul>
         <li><a href="#get-all-user-items">Get All of a User's Items</a></li>
         <li><a href="#get-item">Get Item</a></li>
         <li><a href="#create-item">Create Item</a></li>
         <li><a href="#update-item">Update Item</a></li>
         <li><a href="#delete-item">Delete Item</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Session Endpoints</a>
+      <ul>
+        <li><a href="#login">Login/Create Session</a></li>
       </ul>
     </li>
   </ol>
