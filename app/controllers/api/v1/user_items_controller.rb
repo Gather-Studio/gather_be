@@ -1,6 +1,7 @@
 class Api::V1::UserItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
-  before_action :set_user, only: [:index]
+  before_action :set_user, only: [:index, :destroy]
+  include ErrorHelper
 
   # GET /api/v1/users/:user_id/items
   def index
@@ -39,9 +40,12 @@ class Api::V1::UserItemsController < ApplicationController
 
   # DELETE api/v1/users/:user_id/items/1
   def destroy
-    require 'pry'; binding.pry
-    @item.destroy
+   if @item.user_id == @user.id
+    @item.destroy 
     render status: 204
+   else 
+    render json: ErrorSerializer.format_error(forbidden_error), status: 403
+   end
   end
 
   private
