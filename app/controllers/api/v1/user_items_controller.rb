@@ -1,6 +1,7 @@
 class Api::V1::UserItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
-  before_action :set_user, only: [:index]
+  before_action :set_user, only: [:index, :destroy]
+  include ErrorHelper
 
   # GET /api/v1/users/:user_id/items
   def index
@@ -30,7 +31,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # PATCH/PUT api/v1/users/:user_id/items/1
   def update
-    if @item.update(item_params)
+    if @item.update(item_update_params)
       render json: ItemSerializer.new(@item), status: :ok
     else
       render_error(@item)
@@ -39,8 +40,12 @@ class Api::V1::UserItemsController < ApplicationController
 
   # DELETE api/v1/users/:user_id/items/1
   def destroy
-    @item.destroy
+   if @item.user_id == @user.id
+    @item.destroy 
     render status: 204
+   else 
+    render json: ErrorSerializer.format_error(forbidden_error), status: 403
+   end
   end
 
   private
@@ -53,6 +58,11 @@ class Api::V1::UserItemsController < ApplicationController
     end
 
     def item_params
+      params[:item][:user_id] = params[:user_id].to_i
+      params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
+    end
+
+    def item_update_params
       params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
     end
 end
