@@ -39,6 +39,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # DELETE api/v1/users/:user_id/items/1
   def destroy
+    require 'pry'; binding.pry
     @item.destroy
     render status: 204
   end
@@ -53,6 +54,7 @@ class Api::V1::UserItemsController < ApplicationController
     end
 
     def item_params
+      params[:item][:user_id] = params[:user_id].to_i
       params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
     end
 end
