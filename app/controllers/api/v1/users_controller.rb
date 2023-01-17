@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :current_user, only: [:show, :update, :destroy]
+  include ErrorHelper
 
   # GET /api/v1/users
   def index
@@ -41,7 +42,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   private
-    def set_user
+    def current_user
       @user = User.find(params[:id])
     end
 
