@@ -3,5 +3,6 @@ class User < ApplicationRecord
   validates_uniqueness_of :email 
   validates_presence_of :password_digest, :first_name, :last_name 
 
-  has_secure_password 
+  has_secure_password
+  enum role: %w(default admin)
 end

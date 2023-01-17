@@ -14,6 +14,22 @@ RSpec.describe User, type: :model do
     it { should have_many(:items) }
   end
 
+  describe 'roles' do
+    it "can be created as an admin" do
+      user = User.create(email: 'sample@email.com', password: 'abc', first_name: 'Jessica', last_name: 'Day', role: 1)
+
+      expect(user.role).to eq("admin")
+      expect(user.admin?).to be_truthy
+    end
+
+    it "can be created as a default user" do
+      user = User.create(email: 'sample@email.com', password: 'abc', first_name: 'Jessica', last_name: 'Day', role: 0)
+
+      expect(user.role).to eq("default")
+      expect(user.default?).to be_truthy
+    end
+  end
+
   let!(:user) {User.create!(email: "missday@newgirl.com", password: "ilovecrafts", password_confirmation: "ilovecrafts", first_name: "Jessica", last_name: "Day")}
 
   let!(:item1) {user.items.create!(name: "Vase", status: 0, user_id: user.id)}
