@@ -50,7 +50,6 @@ class Api::V1::UsersController < ApplicationController
   private
 
     def user_params
-      params[:user][:email].downcase! if params[:user][:email]
       params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role)
     end
 end
