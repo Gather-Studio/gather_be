@@ -16,8 +16,7 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
     ({
       name: "Vase", 
       status: 0, 
-      clay_body: "Brown Speckle", 
-      # glazes: "Rainforest x2, Snow x1", 
+      clay_body: "Brown Speckle",
       height: 10.0, 
       width: 4.5, 
       memo: "It's a little wonky", 
@@ -56,7 +55,8 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(item).to have_key :status
       expect(item).to have_key :style
       expect(item).to have_key :clay_body
-      # expect(item).to have_key :glazes
+      expect(item).to have_key :item_glazes
+      expect(item[:item_glazes]).to be_an Array
       expect(item).to have_key :height
       expect(item).to have_key :width
       expect(item).to have_key :memo
@@ -82,7 +82,8 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(item).to have_key :status
       expect(item).to have_key :style
       expect(item).to have_key :clay_body
-      # expect(item).to have_key :glazes
+      expect(item).to have_key :item_glazes
+      expect(item[:item_glazes]).to be_an Array
       expect(item).to have_key :height
       expect(item).to have_key :width
       expect(item).to have_key :memo
@@ -115,7 +116,8 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
         expect(item).to have_key :status
         expect(item).to have_key :style
         expect(item).to have_key :clay_body
-        # expect(item).to have_key :glazes
+        expect(item).to have_key :item_glazes
+        expect(item[:item_glazes]).to be_an Array
         expect(item).to have_key :height
         expect(item).to have_key :width
         expect(item).to have_key :memo
@@ -176,7 +178,8 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
         expect(item).to have_key :status
         expect(item).to have_key :style
         expect(item).to have_key :clay_body
-        # expect(item).to have_key :glazes
+        expect(item).to have_key :item_glazes
+        expect(item[:item_glazes]).to be_an Array
         expect(item).to have_key :height
         expect(item).to have_key :width
         expect(item).to have_key :memo
