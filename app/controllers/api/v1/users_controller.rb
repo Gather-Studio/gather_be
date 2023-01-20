@@ -1,6 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   include ErrorHelper
   include AuthHelper
+  include ParamsHelper
   
   before_action only: [:show, :update, :destroy] do
     current_user(params[:id])
@@ -10,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
     validate_api_key(params[:api_key])
   end
 
-  # GET /api/v1/users
+  # GET /api/v1/users - admin only
   def index 
     @users = User.all
     render json: UserSerializer.new(@users), status: :ok
@@ -47,8 +48,4 @@ class Api::V1::UsersController < ApplicationController
     render status: 204
   end
 
-private
-  def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role)
-  end
 end
