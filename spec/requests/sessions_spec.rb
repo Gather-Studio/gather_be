@@ -35,10 +35,11 @@ RSpec.describe "api/v1/sessions", type: :request do
     context "with valid parameters" do
       it "creates an new session and renders a JSON response with the user's information" do 
         user = User.create! user_information
-
         post api_v1_sessions_url, params: valid_attributes , headers: valid_headers, as: :json
+        
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
+        
         body = JSON.parse(response.body, symbolize_names: true)[:data]
         
         expect(body).to be_a Hash
@@ -50,6 +51,7 @@ RSpec.describe "api/v1/sessions", type: :request do
         expect(user[:email]).to be_a String
         expect(user[:first_name]).to be_a String
         expect(user[:last_name]).to be_a String
+        expect(user[:api_key]).to eq nil
       end
     end
 
@@ -57,6 +59,7 @@ RSpec.describe "api/v1/sessions", type: :request do
       it "renders a JSON response with errors if the information is incorrect" do
         user = User.create! user_information
         post api_v1_sessions_url, params: invalid_attributes , headers: valid_headers, as: :json
+        
         expect(response).to have_http_status(:bad_request)
         expect(response.content_type).to match(a_string_including("application/json"))
 

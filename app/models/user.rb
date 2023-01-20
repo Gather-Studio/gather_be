@@ -5,4 +5,9 @@ class User < ApplicationRecord
 
   has_secure_password
   enum role: %w(default admin)
+
+  before_create do
+    self.email.downcase!
+    self.api_key = SecureRandom.hex if self.admin?
+  end
 end

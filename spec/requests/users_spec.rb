@@ -8,7 +8,8 @@ RSpec.describe "api/v1/users", type: :request do
       password: "ilovecrafts",
       password_confirmation: "ilovecrafts",
       first_name: "Jessica",
-      last_name: "Day"
+      last_name: "Day",
+      role: "admin"
     })
   }
 
@@ -27,10 +28,10 @@ RSpec.describe "api/v1/users", type: :request do
   }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      User.create! valid_attributes
-      get api_v1_users_url, headers: valid_headers, as: :json
+    it "renders a successful response if an accurate api key is given" do
+     admin = User.create! valid_attributes
 
+      get "/api/v1/users?api_key=#{admin.api_key}"
       expect(response).to be_successful
       expect(response).to have_http_status(:ok)
     
@@ -46,13 +47,26 @@ RSpec.describe "api/v1/users", type: :request do
       expect(user[:first_name]).to be_a String
       expect(user[:last_name]).to be_a String
     end
+
+    it "renders an unsuccessful response if an inaccurate api key is given" do
+     admin = User.create! valid_attributes
+
+      get "/api/v1/users?api_key=fakeapikey"
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
+    
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+      
+      expect(body).to be_a Hash
+      expect(body[:error]).to eq("Invalid API key.")
+    end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
       user = User.create! valid_attributes
-      item = user.items.create!(name: "Knit Sweater", status: 0)
       get api_v1_user_url(user), as: :json
+
       expect(response).to be_successful
       expect(response).to have_http_status(:ok)
 
@@ -67,20 +81,7 @@ RSpec.describe "api/v1/users", type: :request do
       expect(user[:email]).to be_a String
       expect(user[:first_name]).to be_a String
       expect(user[:last_name]).to be_a String
-      # expect(user[:items]).to be_an Array
-
-      # item = user[:items].first
-      # expect(item).to have_key :id
-      # expect(item).to have_key :name
-      # expect(item).to have_key :status
-      # expect(item).to have_key :clay_body
-      # expect(item).to have_key :glazes
-      # expect(item).to have_key :height
-      # expect(item).to have_key :width
-      # expect(item).to have_key :memo
-      # expect(item).to have_key :user_id
-      # expect(item).to have_key :created_at
-      # expect(item).to have_key :updated_at
+      expect(user[:api_key]).to be_a String
     end
   end
 
@@ -110,7 +111,6 @@ RSpec.describe "api/v1/users", type: :request do
         expect(user[:email]).to be_a String
         expect(user[:first_name]).to be_a String
         expect(user[:last_name]).to be_a String
-        # expect(user[:items]).to be_an Array
       end
     end
 
@@ -125,6 +125,7 @@ RSpec.describe "api/v1/users", type: :request do
       it "renders a JSON response with errors for the new user" do
         post api_v1_users_url,
              params: { user: invalid_attributes }, headers: valid_headers, as: :json
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
 
@@ -180,6 +181,7 @@ RSpec.describe "api/v1/users", type: :request do
         user = User.create! valid_attributes
         patch api_v1_user_url(user),
               params: { user: new_attributes }, headers: valid_headers, as: :json
+
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
 
@@ -193,7 +195,6 @@ RSpec.describe "api/v1/users", type: :request do
         expect(user[:email]).to be_a String
         expect(user[:first_name]).to be_a String
         expect(user[:last_name]).to be_a String
-        # expect(user[:items]).to be_an Array
       end
     end
 
@@ -204,6 +205,10 @@ RSpec.describe "api/v1/users", type: :request do
               params: { user: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
+
+        body = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(body).to be_a Hash
+        expect(body).to have_key(:error)
       end
     end
   end
