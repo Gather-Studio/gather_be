@@ -2,11 +2,12 @@ class Api::V1::SessionsController < ApplicationController
   include AuthHelper
   include ErrorHelper
   include ParamsHelper 
-  before_action :downcase_email_params
 
   # POST /api/v1/sessions
     def create
-    user = User.find_by(email: params[:email])
+    email = params[:email].downcase
+    user = User.find_by(email: email)
+    
     if authenticated(user)
       render json: UserSerializer.new(user), status: 201
     else
