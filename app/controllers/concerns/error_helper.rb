@@ -13,4 +13,8 @@ module ErrorHelper
   def forbidden_error
     "Sorry, you do not have access to to do that."
   end
+
+  def key_error 
+    "Invalid API key."
+  end
 end

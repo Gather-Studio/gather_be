@@ -1,9 +1,17 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :current_user, only: [:show, :update, :destroy]
   include ErrorHelper
+  include AuthHelper
+  
+  before_action only: [:show, :update, :destroy] do
+    current_user(params[:id])
+  end
+
+  before_action only: [:index] do 
+    validate_api_key(params[:api_key])
+  end
 
   # GET /api/v1/users
-  def index
+  def index 
     @users = User.all
     render json: UserSerializer.new(@users), status: :ok
   end
@@ -15,9 +23,7 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /api/v1/users
   def create
-    new_user = user_params 
-    new_user[:email] = new_user[:email].downcase 
-    @user = User.new(new_user)
+    @user = User.new(user_params)
     
     if @user.save
       render json: UserSerializer.new(@user), status: :created
@@ -42,11 +48,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   private
-    def current_user
-      @user = User.find(params[:id])
-    end
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
+      params[:user][:email].downcase! if params[:user][:email]
+      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role)
     end
 end
