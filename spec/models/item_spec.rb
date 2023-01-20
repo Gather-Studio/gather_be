@@ -8,6 +8,8 @@ RSpec.describe Item, type: :model do
 
   describe 'relationships' do
     it { should belong_to(:user) }
+    it {should have_many(:item_glazes) }
+    it {should have_many(:glazes).through(:item_glazes) }
   end
 
   let!(:user) {User.create!(email: "missday@newgirl.com", password: "ilovecrafts", password_confirmation: "ilovecrafts", first_name: "Jessica", last_name: "Day")}
