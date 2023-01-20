@@ -66,6 +66,9 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       item = user.items.create! valid_attributes
+      glaze = Glaze.create!(name: "Snow", brand: "Amaco")
+      glaze = item.item_glazes.create!(item: item, glaze: glaze, layers: 2)
+      
       get api_v1_user_item_url(user, item), as: :json
       expect(response).to be_successful
       expect(response).to have_http_status(:ok)
@@ -84,6 +87,7 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(item).to have_key :clay_body
       expect(item).to have_key :item_glazes
       expect(item[:item_glazes]).to be_an Array
+      expect(item[:item_glazes].first[:glaze]).to eq("Snow")
       expect(item).to have_key :height
       expect(item).to have_key :width
       expect(item).to have_key :memo
