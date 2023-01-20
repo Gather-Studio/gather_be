@@ -1,17 +1,15 @@
 class Api::V1::UserItemsController < ApplicationController
+  include ErrorHelper
   before_action :set_item, only: [:show, :update, :destroy]
   before_action only: [:index, :destroy] do
     current_user(params[:user_id])
   end
-  include ErrorHelper
 
   # GET /api/v1/users/:user_id/items
   def index
-    if params[:status]
-      @items = @user.items.filter_by_status(params[:status])
-    else 
-      @items = @user.items
-    end 
+    @items = Item.where(nil) # creates an anonymous scope
+    @items = @items.filter_by_status(params[:status]) if params[:status].present?
+    
     render json: ItemSerializer.new(@items), status: :ok
   end
 
