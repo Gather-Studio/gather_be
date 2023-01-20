@@ -1,6 +1,8 @@
 class Api::V1::UserItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
-  before_action :current_user, only: [:index, :destroy]
+  before_action only: [:index, :destroy] do
+    current_user(params[:user_id])
+  end
   include ErrorHelper
 
   # GET /api/v1/users/:user_id/items
@@ -51,10 +53,6 @@ class Api::V1::UserItemsController < ApplicationController
   private
     def set_item
       @item = Item.find(params[:id])
-    end
-
-    def current_user 
-      @user = User.find(params[:user_id])
     end
 
     def item_params
