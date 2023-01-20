@@ -14,8 +14,14 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
 
   let(:valid_attributes) {
     ({
-      name: "Vase",
-      status: 0,
+      name: "Vase", 
+      status: 0, 
+      clay_body: "Brown Speckle", 
+      glazes: "Rainforest x2, Snow x1", 
+      height: 10.0, 
+      width: 4.5, 
+      memo: "It's a little wonky", 
+      style: "Wheel-Thrown",
       user_id: user.id
     })
   }
@@ -39,6 +45,7 @@ RSpec.describe "api/v1/users/:user_id/items", type: :request do
       expect(response).to have_http_status(:ok)
 
       body = JSON.parse(response.body, symbolize_names: true)[:data]
+
       expect(body).to be_an Array
       expect(body.first).to have_key :id
       expect(body.first[:type]).to eq("item")

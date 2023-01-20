@@ -1,5 +1,6 @@
 class Api::V1::UserItemsController < ApplicationController
   include ErrorHelper
+  include ParamsHelper
   before_action :set_item, only: [:show, :update, :destroy]
   before_action only: [:index, :destroy] do
     current_user(params[:user_id])
@@ -31,7 +32,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # PATCH/PUT api/v1/users/:user_id/items/1
   def update
-    if @item.update(item_update_params)
+    if @item.update(item_params)
       render json: ItemSerializer.new(@item), status: :ok
     else
       render_error(@item)
@@ -48,17 +49,8 @@ class Api::V1::UserItemsController < ApplicationController
    end
   end
 
-  private
-    def set_item
-      @item = Item.find(params[:id])
-    end
-
-    def item_params
-      params[:item][:user_id] = params[:user_id].to_i
-      params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
-    end
-
-    def item_update_params
-      params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo, :user_id)
-    end
+private
+  def set_item
+    @item = Item.find(params[:id])
+  end
 end
