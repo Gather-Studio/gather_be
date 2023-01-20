@@ -1,5 +1,4 @@
 class Api::V1::GlazesController < ApplicationController
-  include ErrorHelper
   before_action :set_glaze, only: [:show, :update, :destroy]
 
   # GET /api/v1/glazes
@@ -45,7 +44,4 @@ class Api::V1::GlazesController < ApplicationController
       @glaze = Glaze.find(params[:id])
     end
 
-    def glaze_params
-      params.require(:glaze).permit(:name, :brand)
-    end
 end

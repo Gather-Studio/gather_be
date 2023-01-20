@@ -1,8 +1,4 @@
 class Api::V1::UsersController < ApplicationController
-  include ErrorHelper
-  include AuthHelper
-  include ParamsHelper
-  
   before_action only: [:show, :update, :destroy] do
     current_user(params[:id])
   end

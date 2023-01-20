@@ -1,7 +1,4 @@
 class Api::V1::SessionsController < ApplicationController 
-  include AuthHelper
-  include ErrorHelper
-  include ParamsHelper 
 
   # POST /api/v1/sessions
     def create

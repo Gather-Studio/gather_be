@@ -1,6 +1,4 @@
 class Api::V1::UserItemsController < ApplicationController
-  include ErrorHelper
-  include ParamsHelper
   before_action :set_item, only: [:show, :update, :destroy]
   before_action only: [:index, :destroy] do
     current_user(params[:user_id])
