@@ -3,9 +3,7 @@ class Api::V1::ItemsController < ApplicationController
 
   # GET /api/v1/items
   def index
-    @items = Item.where(nil)
-    @items = @items.filter_by_status(params[:status]) if params[:status]
-    @items = @items.filter_by_glaze(params[:glaze]) if params[:glaze]
+    @items = Item.filter(params.slice(:status, :clay_body, :glaze, :style, :name))
     render json: ItemSerializer.new(@items), status: :ok
   end
 
@@ -19,5 +17,4 @@ class Api::V1::ItemsController < ApplicationController
     def set_item
       @item = Item.find(params[:id])
     end
-
 end

@@ -1,4 +1,5 @@
 class Item < ApplicationRecord
+  include Filterable
   belongs_to :user
   has_many :item_glazes, dependent: :destroy
   has_many :glazes, through: :item_glazes 
@@ -8,8 +9,10 @@ class Item < ApplicationRecord
   enum status: {"Built" => 0, "Trimmed" => 1, "Bisque Fired" => 2, "Glazed" => 3, "Complete" => 4}
 
   scope :filter_by_status, -> (status) { where status: status.to_i }
-
-  scope :filter_by_glaze, -> (glaze) { joins(:glazes, :item_glazes).where(glazes: {name: glaze}).uniq}
+  scope :filter_by_style, -> (style) { where style: style }
+  scope :filter_by_name, -> (name) { where("items.name ilike ?", "%#{name}%") }
+  scope :filter_by_clay_body, -> (clay_body) { where clay_body: clay_body }
+  scope :filter_by_glaze, -> (glaze) { joins(:glazes, :item_glazes).where(glazes: {name: glaze})}
 
   # # def self.filter_by_glaze(glaze)
   #     find_by_sql("SELECT * FROM
