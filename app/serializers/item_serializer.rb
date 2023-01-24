@@ -1,20 +1,16 @@
 class ItemSerializer 
   include JSONAPI::Serializer 
 
-  attributes :name, :style, :status, :clay_body, :height, :width, :memo, :item_glazes
+  attributes :name, :style, :status, :clay_body, :height, :width, :memo, :glazes
   
-  attribute :item_glazes do |item|
+  attribute :glazes do |item|
     item.item_glazes.map do |glaze|
       {
-        glaze: glaze_name(glaze.glaze_id),
+        glaze: glaze.id,
         layers: glaze.layers
       }
       end
     end
     
-  def self.glaze_name(id)
-    glaze = Glaze.find(id)
-    glaze.name
-  end
 
 end
