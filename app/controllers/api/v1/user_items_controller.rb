@@ -6,9 +6,7 @@ class Api::V1::UserItemsController < ApplicationController
 
   # GET /api/v1/users/:user_id/items
   def index
-    @items = Item.where(nil) # creates an anonymous scope
-    @items = @items.filter_by_status(params[:status]) if params[:status].present?
-    
+    @items = Item.filter(params.slice(:status, :clay_body, :glaze, :style, :name))
     render json: ItemSerializer.new(@items), status: :ok
   end
 
