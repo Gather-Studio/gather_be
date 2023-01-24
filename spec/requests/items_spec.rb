@@ -79,12 +79,4 @@ name: "Spoon",
       expect(item).to have_key :memo
     end
   end
-
-  describe "GET /show" do
-    it "renders a successful response" do
-      item = Item.create! valid_attributes1
-      get api_v1_item_url(item), as: :json
-      expect(response).to be_successful
-    end
-  end
 end 

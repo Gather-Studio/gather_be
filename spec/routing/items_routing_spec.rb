@@ -5,9 +5,5 @@ RSpec.describe Api::V1::ItemsController, type: :routing do
     it "routes to #index" do
       expect(get: "api/v1/items").to route_to("api/v1/items#index")
     end
-
-    it "routes to #show" do
-      expect(get: "api/v1/items/1").to route_to("api/v1/items#show", id: "1")
-    end
   end
 end

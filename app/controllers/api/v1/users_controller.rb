@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
     current_user(params[:id])
   end
 
-  before_action only: [:index] do 
+  before_action only: [:index, :destroy] do 
     validate_api_key(params[:api_key])
   end
 
@@ -38,7 +38,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/users/1
+  # DELETE /api/v1/users/1 - Admin Only
   def destroy
     @user.destroy
     render status: 204
