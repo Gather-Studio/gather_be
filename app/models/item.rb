@@ -26,12 +26,12 @@ class Item < ApplicationRecord
   #     WHERE glaze_list LIKE ('%#{glaze}%');")
   # end
 
-#   SELECT * from items
-# INNER JOIN item_glazes
-# ON items.id = item_glazes.item_id
-# INNER JOIN glazes 
-# ON item_glazes.glaze_id = glazes.id
-# WHERE glazes.name = '%#{glaze}%';
+  #   SELECT * from items
+  # INNER JOIN item_glazes
+  # ON items.id = item_glazes.item_id
+  # INNER JOIN glazes 
+  # ON item_glazes.glaze_id = glazes.id
+  # WHERE glazes.name = '%#{glaze}%';
 
 
 end
