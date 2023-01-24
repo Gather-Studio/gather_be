@@ -37,12 +37,8 @@ class Api::V1::UserItemsController < ApplicationController
 
   # DELETE api/v1/users/:user_id/items/1
   def destroy
-   if @item.user_id == @user.id
     @item.destroy 
     render status: 204
-   else 
-    render json: ErrorSerializer.format_error(forbidden_error), status: 403
-   end
   end
 
 private

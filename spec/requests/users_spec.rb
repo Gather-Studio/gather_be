@@ -13,6 +13,16 @@ RSpec.describe "api/v1/users", type: :request do
     })
   }
 
+  let(:valid_attributes_2) {
+    ({ 
+      email: "nick@newgirl.com",
+      password: "ilovecrafts",
+      password_confirmation: "ilovecrafts",
+      first_name: "Nick",
+      last_name: "Miller"
+    })
+  }
+
   let(:invalid_attributes) {
     ({ 
       email: "winston@newgirl.com",
@@ -214,12 +224,41 @@ RSpec.describe "api/v1/users", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
+    it "destroys the requested user with accurate API key" do
+      admin = User.create! valid_attributes
+      user = User.create! valid_attributes_2
       expect {
-        delete api_v1_user_url(user), headers: valid_headers, as: :json
+        delete "/api/v1/users/#{user.id}?api_key=#{admin.api_key}"
       }.to change(User, :count).by(-1)
       expect(response).to have_http_status(:no_content)
+    end
+    it "renders an error if an api key is not provided to destroy a user" do
+      admin = User.create! valid_attributes
+      user = User.create! valid_attributes_2
+      expect {
+        delete "/api/v1/users/#{user.id}"
+      }.to change(User, :count).by(0)
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
+    
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+      
+      expect(body).to be_a Hash
+      expect(body[:error]).to eq("Invalid API key.")
+    end
+    it "renders an error if an incorrect api key is provided to destroy a user" do
+      admin = User.create! valid_attributes
+      user = User.create! valid_attributes_2
+      expect {
+        delete "/api/v1/users/#{user.id}?api_key=fakeapikey"
+      }.to change(User, :count).by(0)
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
+    
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+      
+      expect(body).to be_a Hash
+      expect(body[:error]).to eq("Invalid API key.")
     end
   end
 end
