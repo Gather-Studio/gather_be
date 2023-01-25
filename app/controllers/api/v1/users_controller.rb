@@ -44,4 +44,15 @@ class Api::V1::UsersController < ApplicationController
     render status: 204
   end
 
+  private
+
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role)
+  end
+
+  def validate_api_key(api_key)
+    admin = User.find_by(api_key: api_key)
+    api_key_error if api_key == nil || admin == nil
+  end
+  
 end
