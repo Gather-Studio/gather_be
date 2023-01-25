@@ -1,5 +1,5 @@
 class ItemGlazeSerializer 
   include JSONAPI::Serializer 
 
-  attributes :glazes, :layers
+  attributes :item_id, :glaze_id, :layers
 end
