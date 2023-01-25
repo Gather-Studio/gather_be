@@ -1,12 +1,13 @@
 class Api::V1::UserItemsController < ApplicationController
   before_action :set_item, only: [:show, :update, :destroy]
-  before_action only: [:index, :destroy] do
+  before_action only: [:index] do
     current_user(params[:user_id])
   end
 
   # GET /api/v1/users/:user_id/items
   def index
-    @items = Item.filter(params.slice(:status, :clay_body, :glaze, :style, :name))
+    @items = @user.items
+    @items = @items.param_filter(params.slice(:status, :clay_body, :glaze, :style, :name))
     render json: ItemSerializer.new(@items), status: :ok
   end
 
@@ -44,5 +45,9 @@ class Api::V1::UserItemsController < ApplicationController
 private
   def set_item
     @item = Item.find(params[:id])
+  end
+
+  def item_params
+    params.require(:item).permit(:name, :style, :status, :clay_body, :glazes, :height, :width, :memo,:user_id)
   end
 end
