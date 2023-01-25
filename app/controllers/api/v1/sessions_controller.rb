@@ -8,7 +8,13 @@ class Api::V1::SessionsController < ApplicationController
     if authenticated(user)
       render json: UserSerializer.new(user), status: 201
     else
-      render json: ErrorSerializer.format_error(authentication_error), status: 400
+      authentication_error
     end
   end
+
+  private
+    def authenticated(user)
+      user && user.authenticate(params[:password])
+    end
+
 end

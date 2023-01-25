@@ -70,6 +70,23 @@ RSpec.describe "api/v1/users", type: :request do
       expect(body).to be_a Hash
       expect(body[:error]).to eq("Invalid API key.")
     end
+
+    it "renders an unsuccessful response if no api key is given" do
+     admin = User.create! valid_attributes
+
+      get "/api/v1/users"
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
+      
+      body = JSON.parse(response.body, symbolize_names: true)[:data]
+      
+      expect(body).to be_a Hash
+      expect(body[:error]).to eq("Invalid API key.")
+      
+      get "/api/v1/users?api_key="
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 
   describe "GET /show" do
@@ -232,6 +249,7 @@ RSpec.describe "api/v1/users", type: :request do
       }.to change(User, :count).by(-1)
       expect(response).to have_http_status(:no_content)
     end
+    
     it "renders an error if an api key is not provided to destroy a user" do
       admin = User.create! valid_attributes
       user = User.create! valid_attributes_2
@@ -245,7 +263,12 @@ RSpec.describe "api/v1/users", type: :request do
       
       expect(body).to be_a Hash
       expect(body[:error]).to eq("Invalid API key.")
+
+      delete "/api/v1/users/#{user.id}?api_key="
+      expect(response).to_not be_successful
+      expect(response).to have_http_status(:unauthorized)
     end
+
     it "renders an error if an incorrect api key is provided to destroy a user" do
       admin = User.create! valid_attributes
       user = User.create! valid_attributes_2

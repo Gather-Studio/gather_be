@@ -1,14 +1,19 @@
 class ItemSerializer 
   include JSONAPI::Serializer 
 
-  attributes :name, :style, :status, :clay_body, :height, :width, :memo, :glazes
+  attributes :name, :style, :status, :clay_body, :height, :width, :memo, :user_id
   
-  attribute :glazes do |item|
-    item.item_glazes.map do |glaze|
+  attribute :item_glazes do |item|
+    item.item_glazes.map do |item_glaze|
       {
-        glaze: glaze.id,
-        layers: glaze.layers
+      id: item_glaze.id,
+      type: "item_glaze",
+      attributes: 
+      {
+        glaze: item_glaze.glaze_id,
+        layers: item_glaze.layers
       }
+    }
       end
     end
     
