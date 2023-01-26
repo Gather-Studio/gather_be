@@ -2,7 +2,7 @@ module ErrorHelper
 
   def render_error(object)
     error = object.errors.full_messages.to_sentence.to_s
-    serialize_error(error, :unprocessable_entity)
+    serialize_error(error, 422)
   end
 
   def api_key_error
