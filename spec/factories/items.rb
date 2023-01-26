@@ -9,12 +9,4 @@
       memo {Faker::TvShows::NewGirl.quote}
       user_id { 1 }
     end
-
-    # def clay_bodies 
-    #   ["Porcelain", "Red Clay", "Stoneware", "Earthenware"]
-    # end
-
-    # def style 
-    #   ["Wheel Thrown", "Hand Built"]
-    # end
   end
