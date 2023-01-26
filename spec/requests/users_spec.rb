@@ -16,8 +16,8 @@ RSpec.describe "api/v1/users", type: :request do
   let(:valid_attributes_2) {
     ({ 
       email: "nick@newgirl.com",
-      password: "ilovecrafts",
-      password_confirmation: "ilovecrafts",
+      password: "clydesbar",
+      password_confirmation: "clydesbar",
       first_name: "Nick",
       last_name: "Miller"
     })
@@ -26,8 +26,8 @@ RSpec.describe "api/v1/users", type: :request do
   let(:invalid_attributes) {
     ({ 
       email: "winston@newgirl.com",
-      password: "cats",
-      password_confirmation: "ilovecats",
+      password: "furguson",
+      password_confirmation: "catz4lyfe",
       first_name: "Winston",
       last_name: "bishop"
     })
