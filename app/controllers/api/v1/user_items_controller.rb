@@ -44,7 +44,8 @@ class Api::V1::UserItemsController < ApplicationController
 
 private
   def set_item
-    @item = Item.find(params[:id])
+    @item = Item.find_by(id: params[:id], user_id: params[:user_id])
+    not_found_error if @item.nil?
   end
 
   def item_params

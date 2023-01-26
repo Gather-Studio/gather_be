@@ -12,4 +12,9 @@ module ErrorHelper
   def authentication_error
     render json: ErrorSerializer.format_error("Those credentials are incorrect. Try again!"), status: 400
   end
+  
+  def not_found_error 
+    render json: ErrorSerializer.format_error("Item not found."), status: 404
+  end
+
 end
