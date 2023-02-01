@@ -58,7 +58,7 @@ This API is the backend for the Gather Studio website deployed to Heroku. It all
 ## User Endpoints
 
 ### Get All Users - Admin Only
-This endpoint will return all users who are currently signed up to the Gather Studio API. This endpoint is only accessible by admin, and requires authorization through an api key query parameter. Admin members are given an unique API key upon creation of their user account. Admin API keys can e retrieved through this endpoint, default users return an api key value of null.
+This endpoint will return all users who are currently signed up to the Gather Studio API. This endpoint is only accessible by admin, and requires authorization through an api key query parameter. Admin members are given an unique API key upon creation of their user account. Admin API keys can be retrieved through this endpoint, default users return an api key value of null.
 
 #### Request:
 ```
@@ -66,7 +66,82 @@ GET /api/v1/users?api_key=api_key_here
 Content-Type: application/json
 Accept: application/json
 ```
-<img width="755" alt="Screen Shot 2023-02-01 at 11 45 20 AM" src="https://user-images.githubusercontent.com/48455658/216107147-81a55d54-c460-486f-95c6-093c144eadf8.png">
+Sample Response:
 
+```json
+{
+    "data": [
+        {
+            "id": "1",
+            "type": "user",
+            "attributes": {
+                "first_name": "Winston",
+                "last_name": "Bishop",
+                "email": "winston1@newgirl.com",
+                "api_key": null
+            }
+        },
+        {
+            "id": "2",
+            "type": "user",
+            "attributes": {
+                "first_name": "Jessica",
+                "last_name": "Day",
+                "email": "missday@newgirl.com",
+                "api_key": null
+            }
+        },
+                {
+            "id": "3",
+            "type": "user",
+            "attributes": {
+                "first_name": "Example",
+                "last_name": "Admin",
+                "email": "admin@gmail.com",
+                "api_key": "93387c3571f3dd2113bb36bc65005803"
+            }
+        }
+    ]
+}
+```
+
+### Get User by ID 
+
+```
+GET /api/v1/users/3
+Content-Type: application/json
+Accept: application/json
+```
+Sample Response:
+
+```json
+{
+    "data": {
+        "id": "3",
+        "type": "user",
+        "attributes": {
+            "first_name": "Winston",
+            "last_name": "Bishop",
+            "email": "winston@newgirl.com"
+        }
+    }
+}
+```
+## Create User
+This endpoint takes in a user's unique email and password through the JSON payload in the body of the request. The password is processed with the BCrypt gem, which securely encrypts the password through a salt and hashing and returns a password digest. The user is also assigned an API key if they are an admin using the SecureRandom library. The email is downcased then stored with the password digest in the user table, they are a default user the api key value is null. An unsuccessful request returns the appropriate 400 level status code and a specific error explaining the issue i.e passwords do not match, email already taken, missing field.
+
+```
+POST /api/v1/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "jessday@newgirl.com",
+  "password": "craftygal123",
+  "password_confirmation": "craftygal123",
+  "first_name": "Jessica",
+  "last_name": "Day
+}
+```
 
 
